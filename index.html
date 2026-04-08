@@ -50,7 +50,7 @@ font-weight:500;
 }
 
 .searchbar{
-margin:0 40px 20px 40px;
+margin:0 40px 15px 40px;
 }
 
 .searchbar input{
@@ -59,6 +59,22 @@ padding:9px;
 border:1px solid #ccc;
 border-radius:4px;
 font-family:Poppins;
+}
+
+.az-nav{
+margin:0 40px 20px 40px;
+font-size:14px;
+}
+
+.az-nav span{
+margin-right:10px;
+cursor:pointer;
+color:#0ea5b9;
+font-weight:500;
+}
+
+.az-nav span:hover{
+text-decoration:underline;
 }
 
 .list{
@@ -150,6 +166,8 @@ Click on a guru's name to view further information.
 <input type="text" id="search" placeholder="Search Guru Name...">
 </div>
 
+<div class="az-nav" id="aznav"></div>
+
 <div class="list" id="list"></div>
 
 <footer>
@@ -161,15 +179,10 @@ Presented by Sourav
 let openPanel=null
 
 function safeImage(url){
-
 if(!url) return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg"
-
 url=url.trim()
-
 if(url==="") return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg"
-
 return url
-
 }
 
 fetch("datag.csv")
@@ -177,8 +190,8 @@ fetch("datag.csv")
 .then(text=>{
 
 let rows=text.split("\n").slice(1)
-
 let count=1
+let list=document.getElementById("list")
 
 rows.forEach(row=>{
 
@@ -193,6 +206,7 @@ let bio=cols.slice(2).join(",")
 let guru=document.createElement("div")
 guru.className="guru"
 guru.innerText=count+". "+name
+guru.id="guru_"+name[0].toUpperCase()
 
 let panel=document.createElement("div")
 panel.className="panel"
@@ -218,25 +232,50 @@ openPanel=null
 else{
 panel.style.maxHeight=panel.scrollHeight+"px"
 openPanel=panel
-
-panel.scrollIntoView({behavior:"smooth",block:"start"})
+panel.scrollIntoView({behavior:"smooth"})
 }
 
 }
 
-document.getElementById("list").appendChild(guru)
-document.getElementById("list").appendChild(panel)
+list.appendChild(guru)
+list.appendChild(panel)
 
 count++
 
 })
 
+createAZ()
+
 })
+
+function createAZ(){
+
+let letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+let nav=document.getElementById("aznav")
+
+letters.split("").forEach(l=>{
+
+let span=document.createElement("span")
+span.innerText=l
+
+span.onclick=function(){
+
+let target=document.querySelector("[id^='guru_"+l+"']")
+if(target){
+target.scrollIntoView({behavior:"smooth"})
+}
+
+}
+
+nav.appendChild(span)
+
+})
+
+}
 
 document.getElementById("search").addEventListener("keyup",function(){
 
 let value=this.value.toLowerCase()
-
 let gurus=document.querySelectorAll(".guru")
 
 gurus.forEach(g=>{
