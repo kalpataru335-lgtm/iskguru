@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<title>Listed Initiating Gurus of ISKCON</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:Poppins;
+background:#f4fbfd;
+}
+
+header{
+display:flex;
+align-items:center;
+padding:25px 40px;
+}
+
+header img{
+height:65px;
+margin-right:15px;
+}
+
+h1{
+font-family:Montserrat;
+color:#0ea5b9;
+margin:0;
+font-size:32px;
+}
+
+.instructions{
+margin:10px 40px 25px 40px;
+padding:15px;
+border:1px solid #0ea5b9;
+background:#ffffff;
+font-style:italic;
+line-height:1.6;
+}
+
+.instructions a{
+color:#0ea5b9;
+text-decoration:none;
+font-weight:500;
+}
+
+.searchbar{
+margin:0 40px 20px 40px;
+}
+
+.searchbar input{
+width:320px;
+padding:9px;
+border:1px solid #ccc;
+border-radius:4px;
+font-family:Poppins;
+}
+
+.list{
+margin:0 40px 80px 40px;
+}
+
+.guru{
+padding:13px;
+border-bottom:1px solid #e6e6e6;
+cursor:pointer;
+font-weight:500;
+transition:background 0.2s;
+}
+
+.guru:hover{
+background:#eef9fb;
+}
+
+.panel{
+max-height:0;
+overflow:hidden;
+transition:max-height 0.4s ease;
+background:#ffffff;
+border-left:4px solid #0ea5b9;
+padding-left:20px;
+}
+
+.panel-content{
+padding:20px 0;
+}
+
+.panel img{
+width:190px;
+border-radius:8px;
+margin-bottom:10px;
+}
+
+.guru-name{
+font-family:Montserrat;
+font-size:22px;
+color:#0ea5b9;
+margin-bottom:10px;
+}
+
+.bio{
+line-height:1.7;
+max-width:900px;
+}
+
+footer{
+position:fixed;
+bottom:8px;
+right:12px;
+font-size:11px;
+color:#777;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<img src="https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg">
+
+<h1>Listed Initiating Gurus of ISKCON</h1>
+
+</header>
+
+<div class="instructions">
+
+There may be additional initiating gurus within ISKCON who are not included in this directory, as they are not listed on the official ISKCON GBC website as of 8 April 2026.
+
+<br><br>
+
+Sources:
+<a href="https://gbc.iskcon.org/list-of-initiating-gurus-in-iskcon/" target="_blank">Official ISKCON GBC</a>,
+<a href="https://iskconsannyasa.com/present-sannyasis" target="_blank">ISKCON Sannyasa Ministry</a>.
+
+<br><br>
+
+Click on a guru's name to view further information.
+
+</div>
+
+<div class="searchbar">
+<input type="text" id="search" placeholder="Search Guru Name...">
+</div>
+
+<div class="list" id="list"></div>
+
+<footer>
+Presented by Sourav
+</footer>
+
+<script>
+
+let openPanel=null;
+
+function safeImage(url){
+
+if(!url) return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg";
+
+url=url.trim();
+
+if(url==="") return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg";
+
+return url;
+
+}
+
+fetch("datag.csv")
+.then(res=>res.text())
+.then(text=>{
+
+let rows=text.split("\n").slice(1);
+
+let count=1;
+
+rows.forEach(row=>{
+
+if(!row.trim()) return;
+
+let cols=row.split(",");
+
+let name=cols[0];
+let image=safeImage(cols[1]);
+let bio=cols.slice(2).join(",");
+
+let guru=document.createElement("div");
+guru.className="guru";
+guru.innerText=count+". "+name;
+
+let panel=document.createElement("div");
+panel.className="panel";
+
+panel.innerHTML=
+"<div class='panel-content'>"+
+"<div class='guru-name'>"+name+"</div>"+
+"<img src='"+image+"' onerror=\"this.src='https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg'\">"+
+"<div class='bio'>"+bio+"</div>"+
+"</div>";
+
+guru.onclick=function(){
+
+if(openPanel && openPanel!==panel){
+openPanel.style.maxHeight=null;
+}
+
+if(panel.style.maxHeight){
+panel.style.maxHeight=null;
+openPanel=null;
+}
+else{
+panel.style.maxHeight=panel.scrollHeight+"px";
+openPanel=panel;
+
+panel.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+};
+
+document.getElementById("list").appendChild(guru);
+document.getElementById("list").appendChild(panel);
+
+count++;
+
+});
+
+});
+
+document.getElementById("search").addEventListener("keyup",function(){
+
+let value=this.value.toLowerCase();
+
+let gurus=document.querySelectorAll(".guru");
+
+gurus.forEach(g=>{
+
+if(g.innerText.toLowerCase().includes(value)){
+g.style.display="block";
+}
+else{
+g.style.display="none";
+g.nextElementSibling.style.maxHeight=null;
+}
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
