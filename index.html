@@ -206,7 +206,7 @@ let bio=cols.slice(2).join(",")
 let guru=document.createElement("div")
 guru.className="guru"
 guru.innerText=count+". "+name
-guru.id="guru_"+name[0].toUpperCase()
+guru.dataset.letter=name[0].toUpperCase()
 
 let panel=document.createElement("div")
 panel.className="panel"
@@ -232,7 +232,11 @@ openPanel=null
 else{
 panel.style.maxHeight=panel.scrollHeight+"px"
 openPanel=panel
-panel.scrollIntoView({behavior:"smooth"})
+
+setTimeout(()=>{
+guru.scrollIntoView({behavior:"smooth",block:"start"})
+},200)
+
 }
 
 }
@@ -260,9 +264,10 @@ span.innerText=l
 
 span.onclick=function(){
 
-let target=document.querySelector("[id^='guru_"+l+"']")
+let target=document.querySelector(`.guru[data-letter='${l}']`)
+
 if(target){
-target.scrollIntoView({behavior:"smooth"})
+target.scrollIntoView({behavior:"smooth",block:"start"})
 }
 
 }
