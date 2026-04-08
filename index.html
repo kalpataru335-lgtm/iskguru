@@ -80,7 +80,7 @@ background:#eef9fb;
 .panel{
 max-height:0;
 overflow:hidden;
-transition:max-height 0.4s ease;
+transition:max-height 0.45s ease;
 background:#ffffff;
 border-left:4px solid #0ea5b9;
 padding-left:20px;
@@ -158,17 +158,17 @@ Presented by Sourav
 
 <script>
 
-let openPanel=null;
+let openPanel=null
 
 function safeImage(url){
 
-if(!url) return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg";
+if(!url) return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg"
 
-url=url.trim();
+url=url.trim()
 
-if(url==="") return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg";
+if(url==="") return "https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg"
 
-return url;
+return url
 
 }
 
@@ -176,81 +176,82 @@ fetch("datag.csv")
 .then(res=>res.text())
 .then(text=>{
 
-let rows=text.split("\n").slice(1);
+let rows=text.split("\n").slice(1)
 
-let count=1;
+let count=1
 
 rows.forEach(row=>{
 
-if(!row.trim()) return;
+if(!row.trim()) return
 
-let cols=row.split(",");
+let cols=row.split(",")
 
-let name=cols[0];
-let image=safeImage(cols[1]);
-let bio=cols.slice(2).join(",");
+let name=cols[0]
+let image=safeImage(cols[1])
+let bio=cols.slice(2).join(",")
 
-let guru=document.createElement("div");
-guru.className="guru";
-guru.innerText=count+". "+name;
+let guru=document.createElement("div")
+guru.className="guru"
+guru.innerText=count+". "+name
 
-let panel=document.createElement("div");
-panel.className="panel";
+let panel=document.createElement("div")
+panel.className="panel"
 
 panel.innerHTML=
+
 "<div class='panel-content'>"+
 "<div class='guru-name'>"+name+"</div>"+
-"<img src='"+image+"' onerror=\"this.src='https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg'\">"+
+"<img loading='lazy' src='"+image+"' onerror=\"this.src='https://cdn.hdgoswami.com/uploads/20170925213629/iskconLogo_300.jpg'\">"+
 "<div class='bio'>"+bio+"</div>"+
-"</div>";
+"</div>"
 
 guru.onclick=function(){
 
 if(openPanel && openPanel!==panel){
-openPanel.style.maxHeight=null;
+openPanel.style.maxHeight=null
 }
 
 if(panel.style.maxHeight){
-panel.style.maxHeight=null;
-openPanel=null;
+panel.style.maxHeight=null
+openPanel=null
 }
 else{
-panel.style.maxHeight=panel.scrollHeight+"px";
-openPanel=panel;
+panel.style.maxHeight=panel.scrollHeight+"px"
+openPanel=panel
 
-panel.scrollIntoView({behavior:"smooth",block:"start"});
+panel.scrollIntoView({behavior:"smooth",block:"start"})
 }
 
-};
+}
 
-document.getElementById("list").appendChild(guru);
-document.getElementById("list").appendChild(panel);
+document.getElementById("list").appendChild(guru)
+document.getElementById("list").appendChild(panel)
 
-count++;
+count++
 
-});
+})
 
-});
+})
 
 document.getElementById("search").addEventListener("keyup",function(){
 
-let value=this.value.toLowerCase();
+let value=this.value.toLowerCase()
 
-let gurus=document.querySelectorAll(".guru");
+let gurus=document.querySelectorAll(".guru")
 
 gurus.forEach(g=>{
 
 if(g.innerText.toLowerCase().includes(value)){
-g.style.display="block";
+g.style.display="block"
 }
 else{
-g.style.display="none";
-g.nextElementSibling.style.maxHeight=null;
+g.style.display="none"
+g.nextElementSibling.style.maxHeight=null
 }
 
-});
+})
 
-});
+})
 
 </script>
 
